@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-
+import skinHeroImage from "@/assets/skin-hero.png";
 type Answer = "A" | "B" | "C" | "D" | "E";
 type SkinType = "dry" | "oily" | "combination" | "normal" | "sensitive";
 type FlowStep = "initial" | "select-type" | "quiz" | "result";
@@ -241,10 +241,19 @@ export const SkinQuiz = () => {
   // Initial question: "Do you know your skin type?"
   if (flowStep === "initial") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-3xl">
-          <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm overflow-hidden">
-            <CardContent className="p-8 md:p-16">
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Background image with gradient overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${skinHeroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
+        </div>
+
+        <div className="relative z-10 min-h-screen flex items-center justify-center p-4 md:p-8">
+          <div className="w-full max-w-2xl">
+            <div className="p-8 md:p-16">
               <div className="text-center space-y-10">
                 {/* Decorative element */}
                 <div className="flex justify-center">
@@ -277,7 +286,7 @@ export const SkinQuiz = () => {
                     size="lg"
                     variant="outline"
                     onClick={() => handleKnowsSkinType(false)}
-                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground"
+                    className="px-10 py-6 text-base font-medium tracking-wide border-2 bg-background/80 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground"
                   >
                     Help me discover
                   </Button>
@@ -288,8 +297,8 @@ export const SkinQuiz = () => {
                   <div className="w-8 h-[1px] bg-border" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     );
