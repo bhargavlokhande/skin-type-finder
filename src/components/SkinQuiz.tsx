@@ -6,6 +6,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 type Answer = "A" | "B" | "C" | "D" | "E";
+type SkinType = "dry" | "oily" | "combination" | "normal" | "sensitive";
+type FlowStep = "initial" | "select-type" | "quiz" | "result";
 
 interface Question {
   id: number;
@@ -129,7 +131,7 @@ const questions: Question[] = [
   },
 ];
 
-const skinTypeResults = {
+const skinTypeResults: Record<Answer, { type: string; description: string }> = {
   A: {
     type: "Dry Skin",
     description:
@@ -157,10 +159,28 @@ const skinTypeResults = {
   },
 };
 
+const skinTypeOptions: { value: SkinType; label: string }[] = [
+  { value: "dry", label: "Dry Skin" },
+  { value: "oily", label: "Oily Skin" },
+  { value: "combination", label: "Combination Skin" },
+  { value: "normal", label: "Normal Skin" },
+  { value: "sensitive", label: "Sensitive Skin" },
+];
+
+const skinTypeToAnswer: Record<SkinType, Answer> = {
+  dry: "A",
+  oily: "B",
+  combination: "C",
+  normal: "D",
+  sensitive: "E",
+};
+
 export const SkinQuiz = () => {
+  const [flowStep, setFlowStep] = useState<FlowStep>("initial");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
   const [result, setResult] = useState<Answer | null>(null);
+  const [selectedSkinType, setSelectedSkinType] = useState<SkinType | null>(null);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -193,15 +213,115 @@ export const SkinQuiz = () => {
     );
 
     setResult(dominantAnswer);
+    setFlowStep("result");
   };
 
   const handleRestart = () => {
+    setFlowStep("initial");
     setCurrentQuestion(0);
     setAnswers({});
     setResult(null);
+    setSelectedSkinType(null);
   };
 
-  if (result) {
+  const handleKnowsSkinType = (knows: boolean) => {
+    if (knows) {
+      setFlowStep("select-type");
+    } else {
+      setFlowStep("quiz");
+    }
+  };
+
+  const handleSelectSkinType = (type: SkinType) => {
+    setSelectedSkinType(type);
+    setResult(skinTypeToAnswer[type]);
+    setFlowStep("result");
+  };
+
+  // Initial question: "Do you know your skin type?"
+  if (flowStep === "initial") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="p-8">
+            <div className="text-center space-y-8">
+              <div className="space-y-4">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                  Do you know your skin type?
+                </h1>
+                <p className="text-muted-foreground text-lg">
+                  Understanding your skin type is the first step to a perfect skincare routine.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                <Button
+                  size="lg"
+                  onClick={() => handleKnowsSkinType(true)}
+                  className="px-8"
+                >
+                  Yes, I know my skin type
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => handleKnowsSkinType(false)}
+                  className="px-8"
+                >
+                  No, help me find out
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Skin type selection page
+  if (flowStep === "select-type") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="p-8">
+            <div className="space-y-8">
+              <div className="text-center space-y-2">
+                <h1 className="text-3xl font-bold text-foreground">
+                  Select your skin type
+                </h1>
+                <p className="text-muted-foreground">
+                  Choose the option that best describes your skin.
+                </p>
+              </div>
+              <div className="grid gap-3">
+                {skinTypeOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    variant="outline"
+                    className="w-full py-6 text-lg justify-start px-6 hover:bg-secondary/50"
+                    onClick={() => handleSelectSkinType(option.value)}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+              <div className="text-center pt-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => setFlowStep("initial")}
+                  className="text-muted-foreground"
+                >
+                  Go back
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Result page
+  if (flowStep === "result" && result) {
     const skinResult = skinTypeResults[result];
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -216,7 +336,7 @@ export const SkinQuiz = () => {
                 {skinResult.description}
               </p>
               <Button onClick={handleRestart} size="lg" className="mt-6">
-                Take Quiz Again
+                Start Over
               </Button>
             </div>
           </CardContent>
@@ -225,6 +345,7 @@ export const SkinQuiz = () => {
     );
   }
 
+  // Quiz flow
   const currentQ = questions[currentQuestion];
   const currentAnswer = answers[currentQ.id];
 
@@ -270,10 +391,9 @@ export const SkinQuiz = () => {
             <div className="flex justify-between pt-6">
               <Button
                 variant="outline"
-                onClick={handlePrevious}
-                disabled={currentQuestion === 0}
+                onClick={currentQuestion === 0 ? () => setFlowStep("initial") : handlePrevious}
               >
-                Previous
+                {currentQuestion === 0 ? "Go Back" : "Previous"}
               </Button>
               <Button onClick={handleNext} disabled={!currentAnswer}>
                 {currentQuestion === questions.length - 1 ? "See Results" : "Next"}
