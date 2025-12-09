@@ -241,38 +241,56 @@ export const SkinQuiz = () => {
   // Initial question: "Do you know your skin type?"
   if (flowStep === "initial") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardContent className="p-8">
-            <div className="text-center space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                  Do you know your skin type?
-                </h1>
-                <p className="text-muted-foreground text-lg">
-                  Understanding your skin type is the first step to a perfect skincare routine.
-                </p>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+        <div className="w-full max-w-3xl">
+          <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm overflow-hidden">
+            <CardContent className="p-8 md:p-16">
+              <div className="text-center space-y-10">
+                {/* Decorative element */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-[2px] bg-primary" />
+                </div>
+                
+                <div className="space-y-6">
+                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium">
+                    Skin Analysis
+                  </p>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground leading-tight">
+                    Do you know your
+                    <br />
+                    <span className="italic">skin type?</span>
+                  </h1>
+                  <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto leading-relaxed font-light">
+                    Understanding your skin is the first step to a perfect skincare routine.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+                  <Button
+                    size="lg"
+                    onClick={() => handleKnowsSkinType(true)}
+                    className="px-10 py-6 text-base font-medium tracking-wide"
+                  >
+                    Yes, I know
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => handleKnowsSkinType(false)}
+                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground"
+                  >
+                    Help me discover
+                  </Button>
+                </div>
+
+                {/* Decorative element */}
+                <div className="flex justify-center pt-6">
+                  <div className="w-8 h-[1px] bg-border" />
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Button
-                  size="lg"
-                  onClick={() => handleKnowsSkinType(true)}
-                  className="px-8"
-                >
-                  Yes, I know my skin type
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => handleKnowsSkinType(false)}
-                  className="px-8"
-                >
-                  No, help me find out
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -280,42 +298,45 @@ export const SkinQuiz = () => {
   // Skin type selection page
   if (flowStep === "select-type") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardContent className="p-8">
-            <div className="space-y-8">
-              <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold text-foreground">
-                  Select your skin type
-                </h1>
-                <p className="text-muted-foreground">
-                  Choose the option that best describes your skin.
-                </p>
-              </div>
-              <div className="grid gap-3">
-                {skinTypeOptions.map((option) => (
-                  <Button
-                    key={option.value}
-                    variant="outline"
-                    className="w-full py-6 text-lg justify-start px-6 hover:bg-secondary/50"
-                    onClick={() => handleSelectSkinType(option.value)}
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+        <div className="w-full max-w-2xl">
+          <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+            <CardContent className="p-8 md:p-12">
+              <div className="space-y-10">
+                <div className="text-center space-y-4">
+                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium">
+                    Select Your Type
+                  </p>
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-foreground">
+                    Choose your <span className="italic">skin type</span>
+                  </h1>
+                  <div className="w-12 h-[2px] bg-primary mx-auto mt-4" />
+                </div>
+
+                <div className="grid gap-3">
+                  {skinTypeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      className="w-full py-5 px-8 text-lg text-left font-medium rounded-lg border-2 border-border bg-background/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 group"
+                      onClick={() => handleSelectSkinType(option.value)}
+                    >
+                      <span className="font-serif text-xl">{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="text-center pt-4">
+                  <button
+                    onClick={() => setFlowStep("initial")}
+                    className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest"
                   >
-                    {option.label}
-                  </Button>
-                ))}
+                    ← Go back
+                  </button>
+                </div>
               </div>
-              <div className="text-center pt-4">
-                <Button
-                  variant="ghost"
-                  onClick={() => setFlowStep("initial")}
-                  className="text-muted-foreground"
-                >
-                  Go back
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -324,23 +345,45 @@ export const SkinQuiz = () => {
   if (flowStep === "result" && result) {
     const skinResult = skinTypeResults[result];
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardContent className="p-8">
-            <div className="text-center space-y-6">
-              <div className="space-y-2">
-                <h1 className="text-4xl font-bold text-foreground">{skinResult.type}</h1>
-                <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+        <div className="w-full max-w-2xl">
+          <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+            <CardContent className="p-8 md:p-12">
+              <div className="text-center space-y-8">
+                <div className="space-y-2">
+                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium">
+                    Your Result
+                  </p>
+                  <div className="w-12 h-[2px] bg-primary mx-auto" />
+                </div>
+
+                <div className="space-y-6">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground italic">
+                    {skinResult.type}
+                  </h1>
+                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-lg mx-auto font-light">
+                    {skinResult.description}
+                  </p>
+                </div>
+
+                <div className="pt-6">
+                  <Button
+                    onClick={handleRestart}
+                    size="lg"
+                    variant="outline"
+                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground"
+                  >
+                    Start Over
+                  </Button>
+                </div>
+
+                <div className="flex justify-center pt-4">
+                  <div className="w-8 h-[1px] bg-border" />
+                </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {skinResult.description}
-              </p>
-              <Button onClick={handleRestart} size="lg" className="mt-6">
-                Start Over
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -350,58 +393,81 @@ export const SkinQuiz = () => {
   const currentAnswer = answers[currentQ.id];
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardContent className="p-8">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>
-                  Question {currentQuestion + 1} of {questions.length}
-                </span>
-                <span>{Math.round(progress)}%</span>
-              </div>
-              <Progress value={progress} className="h-2" />
-            </div>
-
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">{currentQ.question}</h2>
-
-              <RadioGroup value={currentAnswer} onValueChange={handleAnswer}>
-                <div className="space-y-3">
-                  {currentQ.options.map((option) => (
-                    <div
-                      key={option.value}
-                      className="flex items-start space-x-3 p-4 rounded-lg border border-border hover:bg-secondary/50 transition-colors cursor-pointer"
-                      onClick={() => handleAnswer(option.value)}
-                    >
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label
-                        htmlFor={option.value}
-                        className="flex-1 cursor-pointer text-foreground leading-relaxed"
-                      >
-                        <span className="font-medium">{option.value})</span> {option.text}
-                      </Label>
-                    </div>
-                  ))}
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+      <div className="w-full max-w-2xl">
+        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+          <CardContent className="p-6 md:p-10">
+            <div className="space-y-8">
+              {/* Progress section */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center text-sm text-muted-foreground">
+                  <span className="uppercase tracking-widest font-medium">
+                    Question {currentQuestion + 1}
+                    <span className="text-border mx-2">/</span>
+                    {questions.length}
+                  </span>
+                  <span className="font-medium">{Math.round(progress)}%</span>
                 </div>
-              </RadioGroup>
-            </div>
+                <Progress value={progress} className="h-1 bg-border" />
+              </div>
 
-            <div className="flex justify-between pt-6">
-              <Button
-                variant="outline"
-                onClick={currentQuestion === 0 ? () => setFlowStep("initial") : handlePrevious}
-              >
-                {currentQuestion === 0 ? "Go Back" : "Previous"}
-              </Button>
-              <Button onClick={handleNext} disabled={!currentAnswer}>
-                {currentQuestion === questions.length - 1 ? "See Results" : "Next"}
-              </Button>
+              {/* Question */}
+              <div className="space-y-6">
+                <h2 className="text-xl md:text-2xl font-serif font-medium text-foreground leading-relaxed">
+                  {currentQ.question}
+                </h2>
+
+                <RadioGroup value={currentAnswer} onValueChange={handleAnswer}>
+                  <div className="space-y-3">
+                    {currentQ.options.map((option) => (
+                      <div
+                        key={option.value}
+                        className={`flex items-start space-x-4 p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+                          currentAnswer === option.value
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50 hover:bg-background/50"
+                        }`}
+                        onClick={() => handleAnswer(option.value)}
+                      >
+                        <RadioGroupItem 
+                          value={option.value} 
+                          id={option.value} 
+                          className="mt-0.5"
+                        />
+                        <Label
+                          htmlFor={option.value}
+                          className="flex-1 cursor-pointer text-foreground leading-relaxed"
+                        >
+                          <span className="font-semibold text-primary mr-2">{option.value}.</span>
+                          {option.text}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between pt-4 border-t border-border">
+                <Button
+                  variant="ghost"
+                  onClick={currentQuestion === 0 ? () => setFlowStep("initial") : handlePrevious}
+                  className="text-muted-foreground hover:text-foreground uppercase tracking-widest text-sm"
+                >
+                  ← {currentQuestion === 0 ? "Back" : "Previous"}
+                </Button>
+                <Button 
+                  onClick={handleNext} 
+                  disabled={!currentAnswer}
+                  className="px-8 font-medium tracking-wide"
+                >
+                  {currentQuestion === questions.length - 1 ? "See Results" : "Next →"}
+                </Button>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
