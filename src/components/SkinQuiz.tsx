@@ -251,34 +251,52 @@ export const SkinQuiz = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
         </div>
 
+        {/* Floating decorative elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 left-10 w-32 h-32 rounded-full bg-primary/5 blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/3 right-20 w-48 h-48 rounded-full bg-primary/10 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/4 w-24 h-24 rounded-full bg-secondary/20 blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+          
+          {/* Subtle floating circles */}
+          <div className="absolute top-20 right-1/4 w-2 h-2 rounded-full bg-primary/30 animate-bounce" style={{ animationDuration: '3s' }} />
+          <div className="absolute bottom-40 left-1/3 w-3 h-3 rounded-full bg-primary/20 animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }} />
+          <div className="absolute top-1/3 right-10 w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '1s' }} />
+        </div>
+
+        {/* Corner decorative lines */}
+        <div className="absolute top-8 left-8 w-20 h-20 border-l-2 border-t-2 border-primary/20 opacity-60" />
+        <div className="absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 border-primary/20 opacity-60" />
+
         <div className="relative z-10 min-h-screen flex items-center justify-center p-4 md:p-8">
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-2xl animate-fade-in">
             <div className="p-8 md:p-16">
               <div className="text-center space-y-10">
-                {/* Decorative element */}
-                <div className="flex justify-center">
-                  <div className="w-16 h-[2px] bg-primary" />
+                {/* Decorative element with animation */}
+                <div className="flex justify-center items-center gap-3">
+                  <div className="w-8 h-[1px] bg-primary/50" />
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <div className="w-8 h-[1px] bg-primary/50" />
                 </div>
                 
                 <div className="space-y-6">
-                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium">
+                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
                     Skin Analysis
                   </p>
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground leading-tight">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.3s' }}>
                     Do you know your
                     <br />
-                    <span className="italic">skin type?</span>
+                    <span className="italic bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text">skin type?</span>
                   </h1>
-                  <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto leading-relaxed font-light">
+                  <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.4s' }}>
                     Understanding your skin is the first step to a perfect skincare routine.
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
                   <Button
                     size="lg"
                     onClick={() => handleKnowsSkinType(true)}
-                    className="px-10 py-6 text-base font-medium tracking-wide"
+                    className="px-10 py-6 text-base font-medium tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
                   >
                     Yes, I know
                   </Button>
@@ -286,15 +304,19 @@ export const SkinQuiz = () => {
                     size="lg"
                     variant="outline"
                     onClick={() => handleKnowsSkinType(false)}
-                    className="px-10 py-6 text-base font-medium tracking-wide border-2 bg-background/80 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground"
+                    className="px-10 py-6 text-base font-medium tracking-wide border-2 bg-background/80 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground transition-all duration-300 hover:scale-105"
                   >
                     Help me discover
                   </Button>
                 </div>
 
-                {/* Decorative element */}
-                <div className="flex justify-center pt-6">
-                  <div className="w-8 h-[1px] bg-border" />
+                {/* Decorative element with shimmer effect */}
+                <div className="flex justify-center pt-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-primary/40" />
+                    <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+                    <div className="w-1 h-1 rounded-full bg-primary/40" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -307,8 +329,18 @@ export const SkinQuiz = () => {
   // Skin type selection page
   if (flowStep === "select-type") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-2xl">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-40 h-40 rounded-full bg-primary/5 blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-56 h-56 rounded-full bg-secondary/10 blur-3xl" />
+        </div>
+        
+        {/* Corner decorations */}
+        <div className="absolute top-6 right-6 w-16 h-16 border-r-2 border-t-2 border-primary/20" />
+        <div className="absolute bottom-6 left-6 w-16 h-16 border-l-2 border-b-2 border-primary/20" />
+
+        <div className="w-full max-w-2xl relative z-10 animate-fade-in">
           <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
             <CardContent className="p-8 md:p-12">
               <div className="space-y-10">
@@ -319,17 +351,25 @@ export const SkinQuiz = () => {
                   <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-foreground">
                     Choose your <span className="italic">skin type</span>
                   </h1>
-                  <div className="w-12 h-[2px] bg-primary mx-auto mt-4" />
+                  <div className="flex justify-center items-center gap-2 mt-4">
+                    <div className="w-8 h-[1px] bg-primary/30" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <div className="w-8 h-[1px] bg-primary/30" />
+                  </div>
                 </div>
 
                 <div className="grid gap-3">
-                  {skinTypeOptions.map((option) => (
+                  {skinTypeOptions.map((option, index) => (
                     <button
                       key={option.value}
-                      className="w-full py-5 px-8 text-lg text-left font-medium rounded-lg border-2 border-border bg-background/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 group"
+                      className="w-full py-5 px-8 text-lg text-left font-medium rounded-lg border-2 border-border bg-background/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 group hover:scale-[1.02] hover:shadow-lg animate-fade-in"
+                      style={{ animationDelay: `${index * 0.1}s` }}
                       onClick={() => handleSelectSkinType(option.value)}
                     >
-                      <span className="font-serif text-xl">{option.label}</span>
+                      <span className="font-serif text-xl flex items-center gap-3">
+                        <span className="w-2 h-2 rounded-full bg-primary/40 group-hover:bg-primary-foreground/60 transition-colors" />
+                        {option.label}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -337,7 +377,7 @@ export const SkinQuiz = () => {
                 <div className="text-center pt-4">
                   <button
                     onClick={() => setFlowStep("initial")}
-                    className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest"
+                    className="text-muted-foreground hover:text-foreground transition-all text-sm uppercase tracking-widest hover:tracking-[0.2em]"
                   >
                     ← Go back
                   </button>
@@ -354,40 +394,64 @@ export const SkinQuiz = () => {
   if (flowStep === "result" && result) {
     const skinResult = skinTypeResults[result];
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-2xl">
-          <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+        {/* Celebratory background effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-secondary/15 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 right-1/3 w-32 h-32 rounded-full bg-primary/5 blur-2xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+        </div>
+
+        {/* Decorative corner elements */}
+        <div className="absolute top-8 left-8 w-24 h-24 border-l-2 border-t-2 border-primary/30" />
+        <div className="absolute top-8 right-8 w-24 h-24 border-r-2 border-t-2 border-primary/30" />
+        <div className="absolute bottom-8 left-8 w-24 h-24 border-l-2 border-b-2 border-primary/30" />
+        <div className="absolute bottom-8 right-8 w-24 h-24 border-r-2 border-b-2 border-primary/30" />
+
+        <div className="w-full max-w-2xl relative z-10 animate-scale-in">
+          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
             <CardContent className="p-8 md:p-12">
               <div className="text-center space-y-8">
-                <div className="space-y-2">
+                <div className="space-y-2 animate-fade-in">
                   <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground font-medium">
                     Your Result
                   </p>
-                  <div className="w-12 h-[2px] bg-primary mx-auto" />
+                  <div className="flex justify-center items-center gap-2">
+                    <div className="w-6 h-[1px] bg-primary/50" />
+                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <div className="w-6 h-[1px] bg-primary/50" />
+                  </div>
                 </div>
 
-                <div className="space-y-6">
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground italic">
-                    {skinResult.type}
-                  </h1>
+                <div className="space-y-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  <div className="relative inline-block">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-foreground italic">
+                      {skinResult.type}
+                    </h1>
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                  </div>
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-lg mx-auto font-light">
                     {skinResult.description}
                   </p>
                 </div>
 
-                <div className="pt-6">
+                <div className="pt-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                   <Button
                     onClick={handleRestart}
                     size="lg"
                     variant="outline"
-                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground"
+                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground transition-all duration-300 hover:scale-105"
                   >
                     Start Over
                   </Button>
                 </div>
 
                 <div className="flex justify-center pt-4">
-                  <div className="w-8 h-[1px] bg-border" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-primary/30" />
+                    <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
+                    <div className="w-1 h-1 rounded-full bg-primary/30" />
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -402,9 +466,31 @@ export const SkinQuiz = () => {
   const currentAnswer = answers[currentQ.id];
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-2xl">
-        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 right-10 w-32 h-32 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute bottom-1/4 left-10 w-40 h-40 rounded-full bg-secondary/10 blur-3xl" />
+      </div>
+      
+      {/* Progress indicator dots on the side */}
+      <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-2">
+        {questions.map((_, idx) => (
+          <div
+            key={idx}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              idx === currentQuestion
+                ? 'bg-primary scale-125'
+                : idx < currentQuestion
+                ? 'bg-primary/60'
+                : 'bg-border'
+            }`}
+          />
+        ))}
+      </div>
+
+      <div className="w-full max-w-2xl relative z-10">
+        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm animate-fade-in">
           <CardContent className="p-6 md:p-10">
             <div className="space-y-8">
               {/* Progress section */}
@@ -417,7 +503,13 @@ export const SkinQuiz = () => {
                   </span>
                   <span className="font-medium">{Math.round(progress)}%</span>
                 </div>
-                <Progress value={progress} className="h-1 bg-border" />
+                <div className="relative">
+                  <Progress value={progress} className="h-1 bg-border" />
+                  <div 
+                    className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary shadow-lg shadow-primary/30 transition-all duration-500"
+                    style={{ left: `calc(${progress}% - 6px)` }}
+                  />
+                </div>
               </div>
 
               {/* Question */}
@@ -428,14 +520,15 @@ export const SkinQuiz = () => {
 
                 <RadioGroup value={currentAnswer} onValueChange={handleAnswer}>
                   <div className="space-y-3">
-                    {currentQ.options.map((option) => (
+                    {currentQ.options.map((option, index) => (
                       <div
                         key={option.value}
-                        className={`flex items-start space-x-4 p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+                        className={`flex items-start space-x-4 p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer hover:scale-[1.01] ${
                           currentAnswer === option.value
-                            ? "border-primary bg-primary/5"
+                            ? "border-primary bg-primary/5 shadow-md shadow-primary/10"
                             : "border-border hover:border-primary/50 hover:bg-background/50"
                         }`}
+                        style={{ animationDelay: `${index * 0.05}s` }}
                         onClick={() => handleAnswer(option.value)}
                       >
                         <RadioGroupItem 
