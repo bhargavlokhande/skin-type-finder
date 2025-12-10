@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import skinHeroImage from "@/assets/skin-hero.png";
+
 type Answer = "A" | "B" | "C" | "D" | "E";
 type SkinType = "dry" | "oily" | "combination" | "normal" | "sensitive";
 type FlowStep = "initial" | "select-type" | "quiz" | "result";
+type TransitionDirection = "forward" | "backward";
 
 interface Question {
   id: number;
@@ -181,8 +183,20 @@ export const SkinQuiz = () => {
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
   const [result, setResult] = useState<Answer | null>(null);
   const [selectedSkinType, setSelectedSkinType] = useState<SkinType | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState<TransitionDirection>("forward");
+  const [questionKey, setQuestionKey] = useState(0);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+  const triggerTransition = useCallback((callback: () => void, direction: TransitionDirection = "forward") => {
+    setTransitionDirection(direction);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      callback();
+      setIsTransitioning(false);
+    }, 200);
+  }, []);
 
   const handleAnswer = (answer: Answer) => {
     setAnswers({ ...answers, [questions[currentQuestion].id]: answer });
@@ -190,7 +204,10 @@ export const SkinQuiz = () => {
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      triggerTransition(() => {
+        setCurrentQuestion(currentQuestion + 1);
+        setQuestionKey(prev => prev + 1);
+      }, "forward");
     } else {
       calculateResult();
     }
@@ -198,7 +215,10 @@ export const SkinQuiz = () => {
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
+      triggerTransition(() => {
+        setCurrentQuestion(currentQuestion - 1);
+        setQuestionKey(prev => prev + 1);
+      }, "backward");
     }
   };
 
@@ -212,30 +232,48 @@ export const SkinQuiz = () => {
       answerCounts[a] > answerCounts[b] ? a : b
     );
 
-    setResult(dominantAnswer);
-    setFlowStep("result");
+    triggerTransition(() => {
+      setResult(dominantAnswer);
+      setFlowStep("result");
+    }, "forward");
   };
 
   const handleRestart = () => {
-    setFlowStep("initial");
-    setCurrentQuestion(0);
-    setAnswers({});
-    setResult(null);
-    setSelectedSkinType(null);
+    triggerTransition(() => {
+      setFlowStep("initial");
+      setCurrentQuestion(0);
+      setAnswers({});
+      setResult(null);
+      setSelectedSkinType(null);
+      setQuestionKey(0);
+    }, "backward");
   };
 
   const handleKnowsSkinType = (knows: boolean) => {
-    if (knows) {
-      setFlowStep("select-type");
-    } else {
-      setFlowStep("quiz");
-    }
+    triggerTransition(() => {
+      if (knows) {
+        setFlowStep("select-type");
+      } else {
+        setFlowStep("quiz");
+      }
+    }, "forward");
   };
 
   const handleSelectSkinType = (type: SkinType) => {
-    setSelectedSkinType(type);
-    setResult(skinTypeToAnswer[type]);
-    setFlowStep("result");
+    triggerTransition(() => {
+      setSelectedSkinType(type);
+      setResult(skinTypeToAnswer[type]);
+      setFlowStep("result");
+    }, "forward");
+  };
+
+  const getTransitionClasses = () => {
+    if (isTransitioning) {
+      return transitionDirection === "forward"
+        ? "opacity-0 translate-x-8"
+        : "opacity-0 -translate-x-8";
+    }
+    return "opacity-100 translate-x-0";
   };
 
   // Initial question: "Do you know your skin type?"
@@ -268,7 +306,7 @@ export const SkinQuiz = () => {
         <div className="absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 border-primary/20 opacity-60" />
 
         <div className="relative z-10 min-h-screen flex items-center justify-center p-4 md:p-8">
-          <div className="w-full max-w-2xl animate-fade-in">
+          <div className={`w-full max-w-2xl transition-all duration-300 ease-out ${getTransitionClasses()}`}>
             <div className="p-8 md:p-16">
               <div className="text-center space-y-10">
                 {/* Decorative element with animation */}
@@ -340,7 +378,7 @@ export const SkinQuiz = () => {
         <div className="absolute top-6 right-6 w-16 h-16 border-r-2 border-t-2 border-primary/20" />
         <div className="absolute bottom-6 left-6 w-16 h-16 border-l-2 border-b-2 border-primary/20" />
 
-        <div className="w-full max-w-2xl relative z-10 animate-fade-in">
+        <div className={`w-full max-w-2xl relative z-10 transition-all duration-300 ease-out ${getTransitionClasses()}`}>
           <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
             <CardContent className="p-8 md:p-12">
               <div className="space-y-10">
@@ -376,7 +414,7 @@ export const SkinQuiz = () => {
 
                 <div className="text-center pt-4">
                   <button
-                    onClick={() => setFlowStep("initial")}
+                    onClick={() => triggerTransition(() => setFlowStep("initial"), "backward")}
                     className="text-muted-foreground hover:text-foreground transition-all text-sm uppercase tracking-widest hover:tracking-[0.2em]"
                   >
                     ← Go back
@@ -408,7 +446,7 @@ export const SkinQuiz = () => {
         <div className="absolute bottom-8 left-8 w-24 h-24 border-l-2 border-b-2 border-primary/30" />
         <div className="absolute bottom-8 right-8 w-24 h-24 border-r-2 border-b-2 border-primary/30" />
 
-        <div className="w-full max-w-2xl relative z-10 animate-scale-in">
+        <div className={`w-full max-w-2xl relative z-10 transition-all duration-300 ease-out ${getTransitionClasses()}`}>
           <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
             <CardContent className="p-8 md:p-12">
               <div className="text-center space-y-8">
@@ -489,8 +527,8 @@ export const SkinQuiz = () => {
         ))}
       </div>
 
-      <div className="w-full max-w-2xl relative z-10">
-        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm animate-fade-in">
+      <div className={`w-full max-w-2xl relative z-10 transition-all duration-300 ease-out ${getTransitionClasses()}`}>
+        <Card key={questionKey} className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
           <CardContent className="p-6 md:p-10">
             <div className="space-y-8">
               {/* Progress section */}
@@ -553,7 +591,7 @@ export const SkinQuiz = () => {
               <div className="flex justify-between pt-4 border-t border-border">
                 <Button
                   variant="ghost"
-                  onClick={currentQuestion === 0 ? () => setFlowStep("initial") : handlePrevious}
+                  onClick={currentQuestion === 0 ? () => triggerTransition(() => setFlowStep("initial"), "backward") : handlePrevious}
                   className="text-muted-foreground hover:text-foreground uppercase tracking-widest text-sm"
                 >
                   ← {currentQuestion === 0 ? "Back" : "Previous"}
