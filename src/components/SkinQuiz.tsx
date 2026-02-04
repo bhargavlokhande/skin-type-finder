@@ -1,10 +1,12 @@
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import skinHeroImage from "@/assets/skin-hero.png";
+import { Sparkles } from "lucide-react";
 
 type Answer = "A" | "B" | "C" | "D" | "E";
 type SkinType = "dry" | "oily" | "combination" | "normal" | "sensitive";
@@ -178,6 +180,7 @@ const skinTypeToAnswer: Record<SkinType, Answer> = {
 };
 
 export const SkinQuiz = () => {
+  const navigate = useNavigate();
   const [flowStep, setFlowStep] = useState<FlowStep>("initial");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
@@ -186,6 +189,21 @@ export const SkinQuiz = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<TransitionDirection>("forward");
   const [questionKey, setQuestionKey] = useState(0);
+
+  const answerToSkinType: Record<Answer, SkinType> = {
+    A: "dry",
+    B: "oily",
+    C: "combination",
+    D: "normal",
+    E: "sensitive",
+  };
+
+  const handleViewProducts = () => {
+    if (result) {
+      const skinType = answerToSkinType[result];
+      navigate(`/products/${skinType}`);
+    }
+  };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -473,15 +491,24 @@ export const SkinQuiz = () => {
                   </p>
                 </div>
 
-                <div className="pt-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <div className="pt-6 space-y-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                   <Button
-                    onClick={handleRestart}
+                    onClick={handleViewProducts}
                     size="lg"
-                    variant="outline"
-                    className="px-10 py-6 text-base font-medium tracking-wide border-2 hover:bg-secondary hover:text-secondary-foreground transition-all duration-300 hover:scale-105"
+                    className="px-10 py-6 text-base font-medium tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 gap-2"
                   >
-                    Start Over
+                    <Sparkles className="w-5 h-5" />
+                    View Recommended Products
                   </Button>
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleRestart}
+                      variant="ghost"
+                      className="text-muted-foreground hover:text-foreground uppercase tracking-widest text-sm"
+                    >
+                      ← Start Over
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="flex justify-center pt-4">
