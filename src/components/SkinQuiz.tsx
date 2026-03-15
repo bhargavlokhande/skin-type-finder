@@ -198,10 +198,18 @@ export const SkinQuiz = () => {
     E: "sensitive",
   };
 
+  const skinTypeUrls: Record<SkinType, string> = {
+    sensitive: "https://zevago.in/pages/sensitive-skin-routine-bundle",
+    combination: "https://zevago.in/pages/combination-skin-routine-bundle",
+    oily: "https://zevago.in/pages/oily-skin-guide",
+    normal: "https://zevago.in/pages/normal-skincare-routine-bundles",
+    dry: "https://zevago.in/pages/dry-skin-routine-bundles",
+  };
+
   const handleViewProducts = () => {
     if (result) {
       const skinType = answerToSkinType[result];
-      navigate(`/products/${skinType}`);
+      window.open(skinTypeUrls[skinType], '_blank');
     }
   };
 
