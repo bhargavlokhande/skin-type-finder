@@ -513,7 +513,7 @@ export const SkinQuiz = () => {
                     className="px-10 py-6 text-base font-medium tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 gap-2"
                   >
                     <Sparkles className="w-5 h-5" />
-                    View Recommended Products
+                    Get Personalized Routine
                   </Button>
                   <div className="flex justify-center">
                     <Button
