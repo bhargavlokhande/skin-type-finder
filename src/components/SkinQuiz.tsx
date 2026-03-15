@@ -209,7 +209,7 @@ export const SkinQuiz = () => {
   const handleViewProducts = () => {
     if (result) {
       const skinType = answerToSkinType[result];
-      window.open(skinTypeUrls[skinType], '_blank');
+      window.location.href = skinTypeUrls[skinType];
     }
   };
 
